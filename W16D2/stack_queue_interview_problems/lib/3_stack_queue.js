@@ -26,17 +26,99 @@
 
 class Node {
     // TODO: Implement the Node class!
-
+    constructor(val) {
+        this.value = val;
+        this.next = null;
+    }
 }
 
 class Stack {
     // TODO: Implement the Stack class!
+    constructor() {
+        this.top = null;
+        this.bottom = null;
+        this.length = 0;
+    }
+
+    push(val) {
+        let newNode = new Node(val.value);
+        if(this.length === 0){
+            this.top = newNode;
+            this.bottom = newNode;
+        } else {
+            let temp = this.top;
+            this.top = newNode;
+            this.top.next = temp;
+        }
+        this.length++;
+        return this.size();
+    }
+
+    pop() {
+        let temp = this.top;
+        if(this.length === 0) return null;
+        if(this.length === 1){
+            this.top = null;
+            this.bottom = null;
+        } else {
+            this.top = this.top.next;
+        }
+        this.length--;
+        return temp;
+    }
+
+    size() {
+        return this.length;
+    }
 
 }
 
 class StackQueue {
     // TODO: Implement the StackQueue class!
+    constructor() {
+        this.inStack = new Stack();
+        this.outStack = new Stack();
+        this.front = null;
+        this.back = null;
+    }
 
+    enqueue(val) {
+        const newNode = new Node(val);
+        if (!this.front) {
+            this.front = newNode;
+            this.back = newNode;
+        } else {
+            this.back.next = newNode;
+            this.back = newNode;
+        }
+
+        this.inStack.push(new Node(newNode.value));
+        return this.size();
+    }
+
+    dequeue() {
+        if (!this.front) {
+            return null;
+        } else if (this.size() === 1) {
+            this.front = null;
+            this.back = null;
+        } else {
+            this.front = this.front.next;
+        }
+
+        if (this.outStack.size() === 0) {
+            while (this.inStack.size() > 0) {
+                this.outStack.push(this.inStack.pop());
+            }
+        }
+        let x = this.outStack.pop();
+        return x;
+
+    }
+
+    size() {
+        return this.inStack.size() + this.outStack.size();
+    }
 };
 
 exports.Node = Node;
