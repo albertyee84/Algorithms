@@ -28,6 +28,15 @@
 
 function iterateAcrossLinkedListBackwards(linkedList) {
     // TODO: Implement the iterateAcrossLinkedListBackwards function here
+    if(linkedList.length === 0) return "";
+    let listlength = linkedList.length;
+    let queue = [];
+    for (let i = listlength-1; i >= 0; i--){
+        queue.push(String(linkedList.get(i).value));
+        linkedList.get(i).next = null;
+    }
+    if(queue.length === 1) return queue[0];
+    return queue.join(" -> ");
 
 }
 
