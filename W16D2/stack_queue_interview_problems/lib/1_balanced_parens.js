@@ -76,7 +76,24 @@
 // Let's code!
 // -----------
 function balancedParens(str) {
-
+    const closure = {")": "(", "]": "[", "}": "{"};
+    const opener = {"(": ")", "{": "}", "[": "]"};
+    let stack = [];
+    let array = str.split("");
+    
+    for(let i = 0; i < array.length; i++){
+        if(opener[array[i]]){
+            stack.push(array[i]);
+        } else if(closure[array[i]]){
+            if(closure[array[i]] !== stack.pop()){
+                return false;
+            }
+        }
+    }
+    if(stack.length > 0){
+        return false;
+    }
+    return true;
 }
 
 exports.balancedParens = balancedParens;
