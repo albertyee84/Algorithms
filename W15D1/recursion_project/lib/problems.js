@@ -1,3 +1,4 @@
+/* eslint-disable guard-for-in */
 // Write a function, lucasNumber(n), that takes in a number.
 // The function should return the n-th number of the Lucas Sequence.
 // The 0-th number of the Lucas Sequence is 2.
@@ -17,7 +18,9 @@
 // lucasNumber(5)   // => 11
 // lucasNumber(9)   // => 76
 function lucasNumber(n) {
-
+    if (n === 0) return 2;
+    if (n === 1) return 1;
+    return lucasNumber(n-2) + lucasNumber(n-1);
 }
 
 
@@ -33,7 +36,9 @@ function lucasNumber(n) {
 // sumArray([5, 2])         // => 7
 // sumArray([4, 10, -1, 2]) // => 15
 function sumArray(array) {
-
+    if(array.length === 0) return 0;
+    let sum = array.shift() + sumArray(array);
+    return sum;
 }
 
 
@@ -49,7 +54,8 @@ function sumArray(array) {
 // reverseString("internet")    // => "tenretni"
 // reverseString("friends")     // => "sdneirf"
 function reverseString(str) {
-
+    if(str.length === 0) return "";
+    return reverseString(str.slice(1)) + str[0];
 }
 
 
@@ -70,7 +76,12 @@ function reverseString(str) {
 // pow(3, 4)    // => 81
 // pow(2, -5)   // => 0.03125
 function pow(base, exponent) {
-
+    if( exponent === 0 ) return 1;
+    if(exponent > 0){
+        return base * pow(base, exponent-1);
+    } else {
+        return 1/base * pow(base, exponent + 1);
+    }
 }
 
 
@@ -103,7 +114,13 @@ function pow(base, exponent) {
 //     2-dimensional array: [['some data']]
 //     3-dimensional array: [[['some data']]]
 function flatten(data) {
-
+    if(!Array.isArray(data)) return [data];
+    let result = [];
+    data.forEach(el => {
+        let flattened = flatten(el);
+        result.push(...flattened);
+    });
+    return result;
 }
 
 // Write a function, fileFinder(directories, targetFile), that accepts an object representing directories and a string respresenting a filename.
@@ -146,7 +163,12 @@ function flatten(data) {
 // fileFinder(desktop, 'everlong.flac');            // => true
 // fileFinder(desktop, 'sequoia.jpeg');             // => false
 function fileFinder(directories, targetFile) {
-
+    for (let key in directories) {
+        if(key === targetFile || fileFinder(directories[key], targetFile)){
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -160,7 +182,18 @@ function fileFinder(directories, targetFile) {
 // pathFinder(desktop, 'everlong.flac'));       // => '/music/genres/rock/everlong.flac'
 // pathFinder(desktop, 'honeybadger.png'));     // => null
 function pathFinder(directories, targetFile) {
-
+    for (let name in directories) {
+        if (name === targetFile) {
+            return '/' + targetFile;
+        }
+        // if the target is found in the subdir
+        let subdir = directories[name];
+        let subPath = pathFinder(subdir, targetFile);
+        if (subPath !== null) {
+            return name +  subPath;
+        }
+    }
+    return null;
 }
 
 
